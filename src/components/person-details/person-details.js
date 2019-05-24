@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './person-details.css';
 import Spinner from '../spinner/spinner';
 import SwapiService from '../../services/swapi-service';
+import ErrorButton from '../error-button/error-bitton';
+
 export default class PersonDetails extends Component {
   swapiService = new SwapiService();
   state = {
@@ -53,6 +55,7 @@ export default class PersonDetails extends Component {
               <span className="term">Eye Color</span>
               <span>{eyeColor}</span>
             </li>
+            <li><ErrorButton /></li>
           </ul>
         </div>
       </div>
