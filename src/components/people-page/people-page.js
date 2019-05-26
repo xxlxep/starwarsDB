@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import './people-page.css';
 import ItemList from '../item-list/item-list';
+import SwapiService from '../../services/swapi-service';
+import Row from '../row/row';
 import PersonDetails from '../person-details/person-details';
 import ErrorIndicator from '../error-indicator/error-indicator';
+
 export default class PeoplePage extends Component {
+  swapiService = new SwapiService();
+
   state = {
-    selectedPerson: 3,
+    selectedPerson: 1,
     hasError: false,
   };
   componentDidCatch() {
@@ -21,15 +26,12 @@ export default class PeoplePage extends Component {
     if (this.state.hasError) {
       return <ErrorIndicator />;
     }
-    return (
-      <div className="row mb2">
-        <div className="col-md-6">
-          <ItemList onItemSelected={this.onPersonSelected} />
-        </div>
-        <div className="col-md-6">
-          <PersonDetails personId={this.state.selectedPerson} />
-        </div>
-      </div>
+    const itemList = (
+      <ItemList onItemSelected={this.onPersonSelected} getData={this.swapiService.getAllPeople}>
+        {(item) => (`${item.name}`)}
+      </ItemList>
     );
+    const personDetails = <PersonDetails personId={this.state.selectedPerson} />;
+    return <Row left={itemList} right={personDetails} />;
   }
 }
