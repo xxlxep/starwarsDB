@@ -11,7 +11,10 @@ const ItemList = props => {
     const label = renderLabel(item);
 
     return (
-      <li className="list-group-item" key={id} onClick={() => onItemSelected(id)}>
+      <li
+        className="list-group-item"
+        key={id}
+        onClick={() => onItemSelected(id)}>
         {label}
       </li>
     );
@@ -19,6 +22,4 @@ const ItemList = props => {
 
   return <ul className="item-list list-group">{items}</ul>;
 };
-
-const { getAllPeople } = new SwapiService();
-export default withData(ItemList, getAllPeople);
+export default ItemList;

@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import Header from '../header/header';
 import RandomPlanet from '../random-planet/random-planet';
 import './app.css';
-import Row from '../row/row';
 import ErrorBoundry from '../error-boundary/error-boundary';
 import SwapiService from '../../services/swapi-service';
-import ItemList from '../item-list/item-list';
 import ItemDetails, { Record } from '../item-details/item-details';
+import {
+  PersonList,
+  PlanetList,
+  StarshipList,
+  PersonDetails,
+  PlanetDetails,
+  StarshipDetails,
+} from '../sw-components';
 export default class App extends Component {
   swapiService = new SwapiService();
   state = {
@@ -38,7 +44,10 @@ export default class App extends Component {
       </ItemDetails>
     );
     const starshipDetails = (
-      <ItemDetails itemId={9} getData={getStarship} getImgUrl={getStarshipImage}>
+      <ItemDetails
+        itemId={9}
+        getData={getStarship}
+        getImgUrl={getStarshipImage}>
         <Record field="model" label="Model" />
         <Record field="length" label="Length" />
         <Record field="costInCredits" label="Cost" />
@@ -50,13 +59,12 @@ export default class App extends Component {
         <ErrorBoundry>
           <div className="stardb-app">
             <Header />
-            <Row left={personDetails} right={starshipDetails} />
-            <ItemList getData={getAllPeople} onItemSelected={() => {}}>
-              {({ name }) => <span>{name}</span>}
-            </ItemList>
-            <ItemList getData={getAllPlanets} onItemSelected={() => {}}>
-              {({ name }) => <span>{name}</span>}
-            </ItemList>
+            <PersonDetails itemId={5} />
+            <PlanetDetails itemId={6} />
+            <StarshipDetails itemId={15} />
+            <PersonList>{({ name }) => <span>{name}</span>}</PersonList>
+            <StarshipList>{({ name }) => <span>{name}</span>}</StarshipList>
+            <PlanetList>{({ name }) => <span>{name}</span>}</PlanetList>
           </div>
         </ErrorBoundry>
       </div>
