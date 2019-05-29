@@ -13,6 +13,7 @@ import {
   PlanetDetails,
   StarshipDetails,
 } from '../sw-components';
+import { SwapiServiceProvider } from '../swapi-service-context';
 export default class App extends Component {
   swapiService = new SwapiService();
   state = {
@@ -44,10 +45,7 @@ export default class App extends Component {
       </ItemDetails>
     );
     const starshipDetails = (
-      <ItemDetails
-        itemId={9}
-        getData={getStarship}
-        getImgUrl={getStarshipImage}>
+      <ItemDetails itemId={9} getData={getStarship} getImgUrl={getStarshipImage}>
         <Record field="model" label="Model" />
         <Record field="length" label="Length" />
         <Record field="costInCredits" label="Cost" />
@@ -57,15 +55,17 @@ export default class App extends Component {
     return (
       <div className="container">
         <ErrorBoundry>
-          <div className="stardb-app">
-            <Header />
-            <PersonDetails itemId={5} />
-            <PlanetDetails itemId={6} />
-            <StarshipDetails itemId={15} />
-            <PersonList />
-            <StarshipList />
-            <PlanetList />
-          </div>
+          <SwapiServiceProvider value={this.swapiService}>
+            <div className="stardb-app">
+              <Header />
+              <PersonDetails itemId={5} />
+              <PlanetDetails itemId={6} />
+              <StarshipDetails itemId={15} />
+              <PersonList />
+              <StarshipList />
+              <PlanetList />
+            </div>
+          </SwapiServiceProvider>
         </ErrorBoundry>
       </div>
     );
