@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import './item-details.css';
-import Spinner from '../spinner/spinner';
-import SwapiService from '../../services/swapi-service';
-import ErrorButton from '../error-button/error-bitton';
 
 const Record = ({ item, field, label }) => {
   return (
@@ -15,7 +12,6 @@ const Record = ({ item, field, label }) => {
 export { Record };
 
 export default class ItemDetails extends Component {
-  swapiService = new SwapiService();
   state = {
     item: null,
     loading: true,
@@ -24,33 +20,33 @@ export default class ItemDetails extends Component {
     this.updateitem();
   }
   componentDidUpdate(prevProps) {
-    if (this.props.itemId != prevProps.itemId) {
+    if (
+      this.props.itemId !== prevProps.itemId ||
+      this.props.getData !== prevProps.getData ||
+      this.props.getImageUrl !== prevProps.getImageUrl
+    ) {
       this.updateitem();
     }
   }
 
   updateitem() {
-    const { itemId, getData } = this.props;
+    const { itemId, getData, getImageUrl } = this.props;
     if (!itemId) {
       return;
     }
     getData(itemId).then(item => {
-      this.setState({ item, loading: false });
+      this.setState({ item, image: getImageUrl(item) });
     });
   }
   render() {
-    const { item } = this.state;
+    const { item, image } = this.state;
     if (!item) {
       return <span>Select a item from a list</span>;
     }
-    const { id, name, gender, birthYear, eyeColor } = item;
+    const { name } = item;
     return (
       <div className="item-details card">
-        <img
-          className="item-image"
-          src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`}
-          alt="r2-d2"
-        />
+        <img className="item-image" src={image} alt="r2-d2" />
         <div className="card-body">
           <h4>{name}</h4>
           <ul className="list-group list-group-flush">
