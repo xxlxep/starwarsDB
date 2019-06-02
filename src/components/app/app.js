@@ -5,17 +5,10 @@ import './app.css';
 import ErrorBoundry from '../error-boundary/error-boundary';
 import SwapiService from '../../services/swapi-service';
 import TestService from '../../services/test-swap-service';
-
-import ItemDetails, { Record } from '../item-details/item-details';
-import {
-  PersonList,
-  PlanetList,
-  StarshipList,
-  PersonDetails,
-  PlanetDetails,
-  StarshipDetails,
-} from '../sw-components';
+import { PeoplePage, PlanetsPage, StarshipsPage } from '../pages';
 import { SwapiServiceProvider } from '../swapi-service-context';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 export default class App extends Component {
   swapiService = new SwapiService();
   state = {
@@ -32,44 +25,22 @@ export default class App extends Component {
     });
   };
 
-  toggleRandomPlanet = () => {
-    this.setState(state => {
-      return {
-        showRandomPlanet: !state.showRandomPlanet,
-      };
-    });
-  };
-
   render() {
     const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
-    const { getPerson, getStarship, getStarshipImage, getPersonImage } = this.swapiService;
-    const personDetails = (
-      <ItemDetails itemId={7} getData={getPerson} getImgUrl={getPersonImage}>
-        <Record field="gender" label="gender" />
-        <Record field="eyeColor" label="Eye Cokor" />
-      </ItemDetails>
-    );
-    const starshipDetails = (
-      <ItemDetails itemId={9} getData={getStarship} getImgUrl={getStarshipImage}>
-        <Record field="model" label="Model" />
-        <Record field="length" label="Length" />
-        <Record field="costInCredits" label="Cost" />
-      </ItemDetails>
-    );
 
     return (
       <div className="container">
         <ErrorBoundry>
           <SwapiServiceProvider value={this.state.swapiService}>
-            <div className="stardb-app">
-              <Header onServiceChange={this.onServiceChange} />
-              <PersonDetails itemId={5} />
-              <PlanetDetails itemId={6} />
-              <StarshipDetails itemId={15} />
-              <PersonList />
-              <StarshipList />
-              <PlanetList />
-            </div>
+            <Router>
+              <div className="stardb-app">
+                <Header onServiceChange={this.onServiceChange} />
+                {planet}
+                <Route path="/people" component={PeoplePage} />
+                <Route path="/planets" component={PlanetsPage} />
+                <Route path="/starships" component={StarshipsPage} />
+              </div>
+            </Router>
           </SwapiServiceProvider>
         </ErrorBoundry>
       </div>
